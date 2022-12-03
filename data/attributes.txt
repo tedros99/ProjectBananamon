@@ -1,6 +1,0 @@
-HP
-Attack
-Defense
-SpAtk
-SpDef
-Speed
