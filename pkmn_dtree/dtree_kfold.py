@@ -5,11 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load all the data
-train_data = np.loadtxt("../data/pokemon_data_fixed.csv", dtype=int, delimiter=",")
-train_labels = np.loadtxt("../data/pokemon_data_labels.csv", dtype=int, delimiter=",")
-attributes = np.loadtxt("../data/attributes.txt", dtype=str)
-test_data = np.loadtxt("../data/pokemon_data_test_fixed.csv", dtype=float, delimiter=",")
-test_labels = np.loadtxt("../data/pokemon_data_test_labels.csv", dtype=float, delimiter=",")
+train_data = np.loadtxt("pokemon_data_fixed.csv", dtype=int, delimiter=",")
+train_labels = np.loadtxt("pokemon_data_labels.csv", dtype=int, delimiter=",")
+attributes = np.loadtxt("attributes.txt", dtype=str)
+test_data = np.loadtxt("pokemon_data_test_fixed.csv", dtype=float, delimiter=",")
+test_labels = np.loadtxt("pokemon_data_test_labels.csv", dtype=float, delimiter=",")
 
 # Init the base decision tree
 dtree = DecisionTreeClassifier(random_state=5)
