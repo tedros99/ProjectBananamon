@@ -1,1 +1,2 @@
-# project_bananamon
+# Project Bananamon
+## Predicting Pokemon types, generation, and BMI...
