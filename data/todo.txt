@@ -2,3 +2,4 @@
 2. Adjust all the projects and the project file paths
 3. Update readme for decision tree
 4. Finish the BMI
+5. Add code examples and usage for the readme
