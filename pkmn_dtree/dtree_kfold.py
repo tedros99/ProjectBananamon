@@ -3,13 +3,22 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import GridSearchCV
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+
+ROOT = os.getcwd()  # root folder of this code
+# find data files
+train_data_file = os.path.join(ROOT, 'data/pokemon_data_fixed.csv')
+train_labels_file = os.path.join(ROOT, 'data/pokemon_data_labels.csv')
+attributes_file = os.path.join(ROOT, 'data/attributes.txt')
+test_data_file = os.path.join(ROOT, 'data/pokemon_data_test_fixed.csv')
+test_labels_file = os.path.join(ROOT, 'data/pokemon_data_test_labels.csv')
 
 # Load all the data
-train_data = np.loadtxt("pokemon_data_fixed.csv", dtype=int, delimiter=",")
-train_labels = np.loadtxt("pokemon_data_labels.csv", dtype=int, delimiter=",")
-attributes = np.loadtxt("attributes.txt", dtype=str)
-test_data = np.loadtxt("pokemon_data_test_fixed.csv", dtype=float, delimiter=",")
-test_labels = np.loadtxt("pokemon_data_test_labels.csv", dtype=float, delimiter=",")
+train_data = np.loadtxt(train_data_file, dtype=int, delimiter=",")
+train_labels = np.loadtxt(train_labels_file, dtype=int, delimiter=",")
+attributes = np.loadtxt(attributes_file, dtype=str)
+test_data = np.loadtxt(test_data_file, dtype=float, delimiter=",")
+test_labels = np.loadtxt(test_labels_file, dtype=float, delimiter=",")
 
 # Init the base decision tree
 dtree = DecisionTreeClassifier(random_state=5)
@@ -55,7 +64,7 @@ plt.show()
 
 #Test the model with custom input!
 user = input("Would you like to test the model with your own pokemon? (Y/N)\n")
-if user == "Y":
+if user == "Y" or "y":
     num = int(input("Please input how many you would like to test: "))
     for i in range(num):
         print("Please input your pokemon's data:")
