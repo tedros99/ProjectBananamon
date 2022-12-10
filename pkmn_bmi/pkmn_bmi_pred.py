@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import os
 import pdb
 from keras.optimizers import Adam
@@ -26,17 +25,14 @@ def main():
     height_test = np.array(pokemonTestData[1:, 10], dtype=float)
     weight_test = np.array(pokemonTestData[1:, 11], dtype=float)
 
-    # BMI_train = np.array([(float(i[1]) / (float(i[0])**2), 4) for i in t_train])
-    # BMI_test = np.array([(float(i[1]) / (float(i[0])**2), 4) for i in t_test])
-
-    # pdb.set_trace()
+    BMI_train = np.array(weight_train / (height_train**2))
+    BMI_test = np.array(weight_test / (height_test**2))
 
     height = Sequential()
     height.add(Dense(12, input_dim=6, kernel_initializer='normal', activation='relu'))
     height.add(Dense(16, activation='relu'))
     height.add(Dense(32, activation='relu'))
     height.add(Dense(16, activation='relu'))
-    height.add(Dense(8, activation='relu'))
     height.add(Dense(1, activation='linear'))
     height.summary()
 
@@ -109,6 +105,11 @@ def main():
     x_train_sums = np.array([np.sum(x) for x in x_train])
     x_test_sums = np.array([np.sum(x) for x in x_test])
 
+    BMI_train_pred = np.array(train_w_labels / (train_h_labels**2))
+    BMI_test_pred = np.array(test_w_labels / (test_h_labels**2))
+
+    input('Press <enter> to continue')
+
     plt.figure('stats to height')
     plt.axis([0,800,0,14])
     plt.plot(x_train_sums, height_train, 'b.', x_test_sums, height_test, 'r.')
@@ -142,6 +143,30 @@ def main():
     plt.ylabel("WEIGHT")
 
     plt.show()
+
+    while(True):
+        input("<enter> to predict your own pokemon!")
+        hp = input("HP: ")
+        attack = input("Attack: ")
+        sp_attack = input("Special Attack: ")
+        defence = input("Defence: ")
+        sp_defence = input("Special Defence: ")
+        speed = input("Speed: ")
+        
+        your_stats = np.array([[hp, attack, sp_attack, defence, sp_defence, speed]], dtype=float)
+        your_height = height.predict(your_stats, verbose=0)
+        your_weight = weight.predict(your_stats, verbose=0)
+        your_BMI = your_weight / (your_height**2)
+
+        print(f'Height: {your_height[0]}')
+        print(f'Weight: {your_weight[0]}')
+        print(f'BMI: {your_BMI[0]}')
+        print()
+        yn = input("Would you like to make another pokemon? y/n ")
+        
+        if(yn == 'n'):
+            break
+
 
 if __name__ == "__main__":
     main()
