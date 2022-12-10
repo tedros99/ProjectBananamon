@@ -94,6 +94,26 @@ def main(args):
 
 
 
+    # Test a Pokemon!
+    answer = input("Would you like to test a pokemon? y/n: ")
+    if answer == "Y" or answer == "y":
+        hp = int(input("hp: "))
+        atk = int(input("atk: "))
+        rdef = int(input("def: "))
+        sptak = int(input("sptak: "))
+        spdef = int(input("spdef: "))
+        spd = int(input("spd: "))
+        pkmn = np.array([[hp, atk, rdef, sptak, spdef, spd]])
+
+        prediction = model.predict(pkmn)
+        types = np.array([np.argsort(pkmn)[-2:][::-1] for pkmn in softmax(prediction)])
+        types_probs = np.array(
+            [[softmax(labels[n])[type_predictions[n, 0]], 
+            softmax(labels[n])[type_predictions[n, 1]]] 
+            for n in range(len(prediction))]
+            )
+        print(f"Your pokemon is probably a {PKMN_TYPES[types[0, 0]]} {PKMN_TYPES[types[0, 1]]} type!, (chances: {types_probs[0, 0]*100:.2f}%, {types_probs[0, 1]*100:.2f}%)")
+
 
 def softmax(x):
     return(np.exp(x - np.max(x)) / np.exp(x - np.max(x)).sum())
