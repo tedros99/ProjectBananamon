@@ -8,14 +8,14 @@ from keras.layers import Dense
 from keras.callbacks import EarlyStopping
 from keras.wrappers.scikit_learn import KerasRegressor
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.getcwd()  # root folder of this code
 
 def main():
     # Load data
     print('Loading data...')
-    basePokemonCSV = np.loadtxt(os.path.join(ROOT, 'PokemonData.csv'), dtype=str, delimiter=',')
-    BMIPokemonCSV = np.loadtxt(os.path.join(ROOT, 'pokemon.csv'), dtype=str, delimiter=',')
-    pokemonTestData = np.loadtxt(os.path.join(ROOT, 'pokemon_data_test.csv'), dtype=str, delimiter=',')
+    basePokemonCSV = np.loadtxt(os.path.join(ROOT, 'data\pokemon_base_stats.csv'), dtype=str, delimiter=',')
+    BMIPokemonCSV = np.loadtxt(os.path.join(ROOT, 'data\pokemon_bmi_stats.csv'), dtype=str, delimiter=',')
+    pokemonTestData = np.loadtxt(os.path.join(ROOT, 'data\pokemon_new_data.csv'), dtype=str, delimiter=',')
 
     x_train = np.array(basePokemonCSV[1:, 4:10], dtype=float)
     height_train = np.array(BMIPokemonCSV[1:, 2], dtype=float)
