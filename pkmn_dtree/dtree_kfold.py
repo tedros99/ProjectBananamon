@@ -64,7 +64,7 @@ plt.show()
 
 #Test the model with custom input!
 user = input("Would you like to test the model with your own pokemon? (Y/N)\n")
-if user == "Y" or "y":
+if user == "Y" or user == "y":
     num = int(input("Please input how many you would like to test: "))
     for i in range(num):
         print("Please input your pokemon's data:")
