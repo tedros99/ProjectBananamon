@@ -1,13 +1,14 @@
+# Neural Network to predict the BMI of a pokemon based on its stats
+
+from keras.callbacks import EarlyStopping
+from keras.models import Sequential
+from keras.layers import Input, Dense
+from keras.optimizers import Adam
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import os
+import tkinter
 import pdb
-from keras.optimizers import Adam
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.callbacks import EarlyStopping
-from keras.wrappers.scikit_learn import KerasRegressor
+import os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,130 +20,88 @@ def main():
     pokemonTestData = np.loadtxt(os.path.join(ROOT, 'pokemon_data_test.csv'), dtype=str, delimiter=',')
 
     x_train = np.array(basePokemonCSV[1:, 4:10], dtype=float)
-    height_train = np.array(BMIPokemonCSV[1:, 2], dtype=float)
-    weight_train = np.array(BMIPokemonCSV[1:, 3], dtype=float)
+    t_train = np.array(BMIPokemonCSV[1:, 2], dtype=float)
 
     x_test = np.array(pokemonTestData[1:, 4:10], dtype=float)
-    height_test = np.array(pokemonTestData[1:, 10], dtype=float)
-    weight_test = np.array(pokemonTestData[1:, 11], dtype=float)
+    t_test = np.array(pokemonTestData[1:, 10], dtype=float)
 
     # BMI_train = np.array([(float(i[1]) / (float(i[0])**2), 4) for i in t_train])
     # BMI_test = np.array([(float(i[1]) / (float(i[0])**2), 4) for i in t_test])
-
     # pdb.set_trace()
 
-    height = Sequential()
-    height.add(Dense(12, input_dim=6, kernel_initializer='normal', activation='relu'))
-    height.add(Dense(16, activation='relu'))
-    height.add(Dense(32, activation='relu'))
-    height.add(Dense(16, activation='relu'))
-    height.add(Dense(1, activation='linear'))
-    height.summary()
+    # Create neural network
+    model = Sequential()
+    model.add(Input(shape=6))
+    model.add(Dense(units=25,activation='relu',name='hidden1'))
+    model.add(Dense(units=50,activation='relu',name='hidden2'))
+    model.add(Dense(units=100,activation='relu',name='hidden3'))
+    model.add(Dense(units=50,activation='sigmoid',name='hidden4'))
+    model.add(Dense(units=25,activation='sigmoid',name='hidden5'))
+    model.add(Dense(units=1,activation='sigmoid',name='output'))
+    model.summary()
 
-    height.compile(
+    input("Press <enter> to continue")
+
+    model.compile(
         loss='mse',
         optimizer=Adam(),
-        metrics=['mse']
+        metrics=['mean_squared_error']
     )
-
-    input('Press <enter> to continue')
-
 
     callback = EarlyStopping(
         monitor='loss',
-        min_delta=1e-3,
+        min_delta=1e-2,
         patience=10,
         verbose=1
     )
 
     # Network training
-    history_height = height.fit(x_train, height_train,
-        epochs=250,
-        batch_size=5,
+    history = model.fit(x_train, t_train,
+        epochs=1000,
+        batch_size=1,
         callbacks=[callback],
         verbose=1,
         validation_split = 0.3
     )
 
-    weight = Sequential()
-    weight.add(Dense(12, input_dim=6, kernel_initializer='normal', activation='relu'))
-    weight.add(Dense(32, activation='relu'))
-    weight.add(Dense(64, activation='relu'))
-    weight.add(Dense(32, activation='relu'))
-    weight.add(Dense(1, activation='linear'))
-    weight.summary()
-
-    input('Press <enter> to continue')
-
-    weight.compile(
-        loss='mse',
-        optimizer=Adam(),
-        metrics=['mse']
-    )
-
-    history_weight = weight.fit(x_train, weight_train,
-        epochs=250,
-        batch_size=5,
-        callbacks=[callback],
-        verbose=1,
-        validation_split = 0.3
-    )
-
-    train_metrics = height.evaluate(x_train, height_train, verbose=0)
+    # Network test
+    train_metrics = model.evaluate(x_train, t_train, verbose=0)
     print('TRAINING DATA')
-    print(f'height loss = {train_metrics[0]:0.4f}')
-    train_metrics = weight.evaluate(x_train, weight_train, verbose=0)
-    print(f'weight loss = {train_metrics[0]:0.4f}')
-    print()
+    print(f'loss = {train_metrics[0]:0.4f}')
+    print(f'accuracy = {train_metrics[1]:0.4f}')
 
-    test_metrics = height.evaluate(x_test, height_test, verbose=0)
+    test_metrics = model.evaluate(x_test, t_test, verbose=0)
     print('TESTING DATA')
-    print(f'height loss = {test_metrics[0]:0.4f}')
-    test_metrics = weight.evaluate(x_test, weight_test, verbose=0)
-    print(f'weight loss = {test_metrics[0]:0.4f}')
+    print(f'loss = {test_metrics[0]:0.4f}')
+    print(f'accuracy = {test_metrics[1]:0.4f}')
 
-    train_h_labels = height.predict(x_train, verbose=0)
-    train_w_labels = weight.predict(x_train, verbose=0)
+    train_labels = model.predict(x_train, verbose=0)
+    test_labels = model.predict(x_test, verbose=0)
 
-    test_h_labels = height.predict(x_test, verbose=0)
-    test_w_labels = weight.predict(x_test, verbose=0)
+    pdb.set_trace()
 
-    x_train_sums = np.array([np.sum(x) for x in x_train])
-    x_test_sums = np.array([np.sum(x) for x in x_test])
+    # BMI_train_pred = np.array([(float(i[1]) / (float(i[0])**2), 4) for i in train_labels])
+    # BMI_test_pred = np.array([(float(i[1]) / (float(i[0])**2), 4) for i in test_labels])
 
-    plt.figure('stats to height')
-    plt.axis([0,800,0,14])
-    plt.plot(x_train_sums, height_train, 'b.', x_test_sums, height_test, 'r.')
-    plt.title("TARGETS")
-    plt.xlabel("BASE STAT TOTALS")
-    plt.ylabel("HEIGHT")
+    # x_train_sums = np.array([np.sum(x) for x in x_train])
+    # x_test_sums = np.array([np.sum(x) for x in x_test])
 
-    plt.figure('stats to height pred')
-    plt.axis([0,800,0,14])
-    plt.plot(x_train_sums, train_h_labels, 'b.', x_test_sums, test_h_labels, 'r.')
-    plt.title("PREDICTIONS")
-    plt.xlabel("BASE STAT TOTALS")
-    plt.ylabel("HEIGHT")
+    # pdb.set_trace()
 
-    plt.show()
+    # plt.figure(1)
+    # plt.plot(x_train_sums, BMI_train, 'r.', x_test_sums, BMI_test, 'b.')
+    # plt.title("Targets")
+    # plt.xlabel("BASE STAT TOTALS")
+    # plt.ylabel("BMI")
+    # plt.show()
 
-    input('Press <enter> to continue')
+    # plt.figure(1)
+    # plt.plot(x_train_sums, BMI_train_pred, 'r.', x_test_sums, BMI_test_pred, 'b.')
+    # plt.title("Predictions")
+    # plt.xlabel("BASE STAT TOTALS")
+    # plt.ylabel("BMI")
+    # plt.show()
 
-    plt.figure('stats to weight')
-    plt.axis([0,800,0,800])
-    plt.plot(x_train_sums, weight_train, 'b.', x_test_sums, weight_test, 'r.')
-    plt.title("TARGETS")
-    plt.xlabel("BASE STAT TOTALS")
-    plt.ylabel("WEIGHT")
-
-    plt.figure('stats to weight pred')
-    plt.axis([0,800,0,800])
-    plt.plot(x_train_sums, train_w_labels, 'b.', x_test_sums, test_w_labels, 'r.')
-    plt.title("PREDICTIONS")
-    plt.xlabel("BASE STAT TOTALS")
-    plt.ylabel("WEIGHT")
-
-    plt.show()
 
 if __name__ == "__main__":
     main()
