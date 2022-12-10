@@ -10,16 +10,16 @@ from keras.optimizers import *
 
 import pkmn_visuals
 
-ROOT = os.path.dirname(os.path.abspath(__file__))  # root directory of this code
+ROOT = os.getcwd()  # root folder of this code
 
 
 parser = argparse.ArgumentParser(description="Train a perceptron to classify pokemon by their stats.")
 parser.add_argument('-t', '--test',
                     help='path to testing file, defaults to ROOT/pokemon_data_test.csv',
-                    default=os.path.join(ROOT, 'pokemon_data_test.csv'))
+                    default=os.path.join(ROOT, 'data\pokemon_new_data.csv'))
 parser.add_argument('-s', '--stats',
                     help='path to training file, defaults to ROOT/PokemonData.csv',
-                    default=os.path.join(ROOT, 'PokemonData.csv'))
+                    default=os.path.join(ROOT, 'data\pokemon_base_stats.csv'))
 
 PKMN_TYPES = ["Normal", "Fire", "Water", "Grass", "Flying", "Fighting", 
 "Poison", "Electric", "Ground", "Rock", "Psychic", "Ice", 
@@ -88,11 +88,11 @@ def main(args):
     # type_prediction_probabilities contains the probabilities corresponding to those 2 types for all pkmn
 
 
-    pdb.set_trace()
+
     # display the visuals
     pkmn_visuals.main(type_predictions, type_prediction_probabilities)
 
-    pdb.set_trace()
+
 
 
 def softmax(x):
