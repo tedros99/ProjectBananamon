@@ -12,7 +12,7 @@ PKMN_TYPES = ["Normal", "Fire", "Water", "Grass", "Flying", "Fighting",
 "Poison", "Electric", "Ground", "Rock", "Psychic", "Ice", 
 "Bug", "Ghost", "Steel", "Dragon", "Dark", "Fairy"]
 
-ROOT = os.path.dirname(os.path.abspath(__file__))  # root directory of this code
+ROOT = os.getcwd()  # root directory of this code
 def main(type_predictions, type_prediction_probabilities):
     global TYPE_PREDICTIONS
     global TYPE_PREDICTION_PROBABILITIES
@@ -57,7 +57,7 @@ def main(type_predictions, type_prediction_probabilities):
     root.mainloop()
 
 def get_pokemon_image(index):
-    path = os.path.join(ROOT, f'pokemon/{index+1}.png')
+    path = os.path.join(ROOT, f'data/pokemon/{index+1}.png')
     pil_image = Image.open(path)
     return ImageTk.PhotoImage(pil_image)
 def place_pokemon_image(image):
