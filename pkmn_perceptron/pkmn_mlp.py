@@ -96,7 +96,7 @@ def main(args):
 
     # Test a Pokemon!
     answer = input("Would you like to test a pokemon? y/n: ")
-    if answer == "Y" or answer == "y":
+    while answer == "Y" or answer == "y":
         hp = int(input("hp: "))
         atk = int(input("atk: "))
         rdef = int(input("def: "))
@@ -113,6 +113,7 @@ def main(args):
             for n in range(len(prediction))]
             )
         print(f"Your pokemon is probably a {PKMN_TYPES[types[0, 0]]} {PKMN_TYPES[types[0, 1]]} type!, (chances: {types_probs[0, 0]*100:.2f}%, {types_probs[0, 1]*100:.2f}%)")
+        answer = input("Would you like to test another pokemon? y/n: ")
 
 
 def softmax(x):
