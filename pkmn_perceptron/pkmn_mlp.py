@@ -62,8 +62,8 @@ def main(args):
 
     print("training the MLP classifier...")
     history = model.fit(x=pkmn_stats, y=label_mask,
-        batch_size=10,
-        epochs=200,
+        batch_size=20,
+        epochs=400,
         verbose=1)
 
     # test the network on training data
